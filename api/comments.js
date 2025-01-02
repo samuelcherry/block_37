@@ -1,5 +1,5 @@
 const router = require("express").Router();
-module.exports = router;
+
 const prisma = require("../prisma");
 
 router.get("/", async (req, res, next) => {
@@ -10,3 +10,5 @@ router.get("/", async (req, res, next) => {
     next();
   }
 });
+
+module.exports = router;

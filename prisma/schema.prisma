@@ -24,7 +24,8 @@ model Item {
 
 model User {
     id Int @id @default(autoincrement())
-    userName String
+    userName String? @unique
+    password String
     created_at DateTime @default(now())
     review Review[]
     comment Comment[]

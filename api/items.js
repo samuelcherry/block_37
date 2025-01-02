@@ -1,5 +1,5 @@
 const router = require("express").Router();
-module.exports = router;
+
 const prisma = require("../prisma");
 
 router.get("/", async (req, res, next) => {
@@ -21,12 +21,17 @@ router.get("/:id", async (req, res, next) => {
   }
 });
 
-router.get("/:id/reviews/:id", async (req, res, next) => {
+router.get("/:id/reviews", async (req, res, next) => {
   try {
-    const id = +req.params.id;
-    const items = await prisma.item.findUnique({ where: { id } });
-    res.json(items);
+    const result = await prisma.review.findMany({
+      where: {
+        item_id: Number(req.params.id)
+      }
+    });
+    res.send(result);
   } catch (err) {
-    next();
+    next(err);
   }
 });
+
+module.exports = router;
