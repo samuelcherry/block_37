@@ -40,4 +40,79 @@ router.get("/:id/reviews/:reviewId", async (req, res, next) => {
   }
 });
 
+router.put(
+  "/:userId/reviews/:reviewId",
+  middleware.protection,
+  async (req, res, next) => {
+    try {
+      const result = await prisma.review.update({
+        where: {
+          id: Number(req.params.reviewId),
+          user_id: Number(req.user.userId)
+        }
+      });
+      res.status(201).send(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+router.put(
+  "/:userId/comments/:commentId",
+  middleware.protection,
+  async (req, res, next) => {
+    try {
+      const result = await prisma.comment.update({
+        where: {
+          comment_id: Number(req.params.commentId),
+          user_id: Number(req.user.userId)
+        },
+        data: {
+          text: String(req.body.text)
+        }
+      });
+      res.status(201).send(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+router.delete(
+  "/:userId/reviews/:reviewId",
+  middleware.protection,
+  async (req, res, next) => {
+    try {
+      const result = await prisma.review.delete({
+        where: {
+          id: Number(req.params.reviewId),
+          user_id: Number(req.user.userId)
+        }
+      });
+      res.sendStatus(204);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+router.delete(
+  "/:userId/comments/:commentId",
+  middleware.protection,
+  async (req, res, next) => {
+    try {
+      const result = await prisma.comment.delete({
+        where: {
+          comment_id: Number(req.params.commentId),
+          user_id: Number(req.user.userId)
+        }
+      });
+      res.sendStatus(204);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 module.exports = router;
